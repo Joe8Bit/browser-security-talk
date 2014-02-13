@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Security - Joe Pettersson</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/joep.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div id="border"></div>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section data-background="./imgs/princecharlescinema1.jpg">
+					
+				</section>
+
+				<section id="intro" data-transition="zoom" data-background-transition="zoom">
+					<h1>Browser Security</h1>
+					<h3>Patterns/anti-patterns, mitigation and testing</h3>
+					<h4><small>Thursday 13th of Feb 2014 | Joe Pettersson @ LondonJS</small></h4>
+				</section>
+
+				<section data-transition="zoom" data-background-transition="zoom">
+					<h1>Joe Pettersson</h1>
+					<h3><a href="https://twitter.com/Joe8bit">@Joe8Bit</a> | <a href="https://github.com/Joe8Bit">github.com/Joe8Bit</a></h3>
+				</section>
+
+				<section data-background="#002960" data-transition="zoom">
+					<img src="./imgs/mckinsey.svg" alt="McKinsey & Company" class="no-shadow">
+				</section>
+
+				<section class="listing" data-transition="linear" data-background-transition="linear">
+					<h4>Concepts</h4>
+					<h3>1. The Fundamental Problem</h3>
+					<h3>2. Trust: never have it</h3>
+					<h4>Practice</h4>
+					<h3>3. DOM based XSS</h3>
+					<h3>4. Security and 'HTML5' API's</h3>
+					<h4>Test</h4>
+					<h3>5. Auditing and Penetration Testing</h3>
+				</section>
+
+				<section>
+					<h1>Why?</h1>
+				</section>
+
+				<section>
+					<h1>Concepts</h1>
+				</section>
+
+				<section>
+					<h2 class="fade">The Fundamental Problem:</h2>
+					<h1>The 'Client' Environment</h1>
+				</section>
+
+				<section>
+					<h3>An environment where your code runs that you don't control is a <em>fundamentally</em> untrustworthy one</h3>
+				</section>
+
+				<section data-transition="fade">
+					<img src="./imgs/blackbox.svg" alt="Blackbox" class="no-shadow">
+				</section>
+
+				<section class="listing">
+					<h4>Issue</h4>
+					<h2>Thick clients/modular security</h2>
+				</section>
+
+				<section>
+					<h1>Strong decoupling</h1>
+				</section>
+
+				<section class="listing">
+					<h4>Example</h4>
+					<h3>A client side HTTP interface shouldn't inherently trust output from a service it's utilising</h3>
+					<h4>Exploited</h4>
+					<h3>Generic stored/reflected XSS attacks</h3>
+					<h3>An open-redirect was exploited to leverage information leakage via a same-origin include</h3>
+				</section>
+
+
+				<section>
+					<h3>Learn from decades of network security models and enforce multi-tiered trust boundries</h3>
+				</section>
+
+				<section>
+					<img src="./imgs/trust-models.svg" alt="Trust Models" class="no-shadow">
+				</section>
+
+				<section class="listing">
+					<h4>Anti-pattern</h4>
+					<h3>A view implicitly trusting output from a model</h3>
+					<h4>Pattern</h4>
+					<h3>The DOM provides a big attack surface for XSS attacks so all interactions with it should be sanitised, regardless of their source</h3>
+				</section>
+
+				<section>
+					<h2>The concepts in front-end security are getting more complex</h2>
+				</section>
+
+				<section>
+					<h1>In practice</h1>
+					<h4>(well, one part of it anyway)</h4>
+				</section>
+
+				<section class="listing" data-transition="fade" data-background-transition="fade">
+					<h4>Purely clientside attacks</h4>
+					<ul>
+						<li>Content spoofing</li>
+						<li>Cross Site Scripting (XSS)</li>
+						<li>Cross Site Request Forgery (CSRF)</li>
+						<li>Information disclosure/leakage</li>
+						<li>Path traversal attacks</li>
+						<li>Authentication attacks</li>
+						<li>Cache poisoning</li>
+						<li>...</li>
+					</ul>
+				</section>
+
+				<section class="listing">
+					<h4>Cross Site Scripting (XSS)</h4>
+					<h3>Stored/persistent</h3>
+					<h3>Reflected/non-persisted</h3>
+					<h3>DOM based</h3>
+				</section>
+
+				<section>
+					<h3>Encoding/Escaping</h1>
+				</section>
+
+				<section class="listing">
+					<h4>Rule 0</h4>
+					<h2>Don't put untrusted data into your HTML unless it is within a <em>whitelisted</em> set of exceptions*</h2>
+					<h4>* Whitelist to follow</h4>
+				</section>
+
+				<section class="large-h1">
+					<h1>EVER</h1>
+				</section>
+
+				<section class="super-h1">
+					<h1>EVER</h1>
+				</section>
+
+
+				<section class="listing">
+					<h4>Rule 1</h4>
+					<h2>Escape untrusted data placed into the content of an HTML element</h2>
+					<h4>Whitelist item: content of an HTML element, HTML escaped</h4>
+				</section>
+
+				<section class="listing">
+					<h4>Bad</h4>
+					<pre><code data-trim>
+element.innerHTML = "<p onmouseover='alert(1)'>Tags and markup</p>";
+element.outerHTML = "<p onmouseover='alert(1)'>Tags and markup</p>";
+document.write("<p onmouseover='alert(1)'>Tags and markup</p>");
+document.writeln("<p onmouseover='alert(1)'>Tags and markup</p>");
+    				</code></pre>
+    				<h4>Good</h4>
+    				<pre><code data-trim>
+element.innerHTML = _.escape("<p onmouseover='alert(1)'>Tags and markup</p>") // Underscore/lo-dash;
+element.outerHTML = "<p onmouseover='alert(1)'>Tags and markup</p>".escapeHTML() // Prototype;
+document.write(_.escape("<p onmouseover='alert(1)'>Tags and markup</p>"));
+document.writeln("<p onmouseover='alert(1)'>Tags and markup</p>".escapeHTML());
+    				</code></pre>
+				</section>
+
+				<section class="listing">
+					<h4>Rolling your own*</h4>
+					<pre><code data-trim>
+// From Mustache.js https://github.com/janl/mustache.js/blob/master/mustache.js#L47				
+var entityMap = {
+	"&": "&amp;amp;",
+	"<": "&amp;lt;",
+	">": "&amp;gt;",
+	'"': '&amp;quot;',
+	"'": '&amp;#39;',
+	"/": '&amp;#x2F;'
+};
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'\/]/g, function (s) {
+		return entityMap[s];
+	});
+}
+    				</code></pre>
+					<h4>* proceed with caution</h4>
+				</section>
+
+				<section class="listing">
+					<h4>Rule 2</h4>
+					<h2>Escape everything non-alphanumeric inside HTML attributes</h2>
+					<h4>Whitelist item: content of an HTML attribute, escape/encode everything non-alphanumeric</h4>
+				</section>
+
+				<section>
+					<h3>Not for complex complex attributes where script execution can more easily take place</h3>
+					<p>Like <code>href</code>, <code>src</code>, <code>style</code> or any of the inline event handlers like <code>onmouseover</code></p>
+				</section>
+
+				<section>
+					<h3>But why is this any different from the same escaping done on HTML element contents?</h3>
+				</section>
+
+				<section>
+					<h3>Because people write HTML without quoted attributes</h3>
+					<p>Properly quoted attributes can only be escaped with the corresponding quote. Unquoted attributes can be broken out of with many characters, including <code>[space] % * + , - / ; < = > ^ |</code></p>
+				</section>
+
+				<section class="listing">
+					<h4>Rule 3</h4>
+					<h2>Untrusted data when dynamically generating JavaScript goes inside a quoted "data value" after it has been escaped/encoded</h2>
+					<h4>Whitelist item: inside data JavaScript data values, JavaScript escaped</h4>
+				</section>
+
+				<section>
+					<h3>You should already know this.</h3>
+				</section>
+
+				<section class="listing">
+					<h4>Tip</h4>
+					<h3>This same JavaScript escaping should also always apply to the 'complex' attributes listed before</h3>
+					<h4>Tip</h4>
+					<h3>Beware <em>ALL</em> evals, even the implicit ones</h3>
+					<pre><code data-trim>
+// Explicit eval: always bad
+eval("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
+// Implicit eval: always bad
+window.setInterval("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
+window.setTimeout("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
+new Function("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
+    				</code></pre>
+				</section>
+
+				<section class="listing">
+					<h4>Tidbit</h4>
+					<h2>Firefox's .quote() method</h2>
+					<pre><code data-trim>
+'Hello world!'.quote();	// "Hello world!"
+' \ — '.quote(); // ""  \u2014 ""
+    				</code></pre>
+    				<p><small><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/quote">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/quote</a></small></p>
+				</section>
+
+				<section class="listing">
+					<h4>Anti-pattern: not understanding the implications of using .setAttribute</h4>
+					<pre><code data-trim>
+var x = document.createElement("a");
+x.href= "#" ;
+// In the line of code below, the encoded data on the right (the second argument to setAttribute) 
+// is an example of untrusted data that was properly JavaScript encoded but still executes.
+x.setAttribute("onclick", "\u0061\u006c\u0065\u0072\u0074\u0028\u0032\u0032\u0029");
+var y = document.createTextNode("Click To Test");
+x.appendChild(y);
+document.body.appendChild(x);
+    				</code></pre>
+				</section>
+
+				<section class="listing">
+					<h4>Pattern</h4>
+					<p><small>Set the attribute directly, doing so with event handler attributes will allow JavaScript encoding to mitigate against DOM based XSS</small></p>
+					<pre><code data-trim>
+// The following does NOT work because the event handler is being set to a string. "alert(7)" is JavaScript encoded.
+document.getElementById("foo").onclick = "\u0061\u006c\u0065\u0072\u0074\u0028\u0037\u0029";
+    				</code></pre>
+				</section>
+
+				<section class="listing">
+					<h4>Aside: JavaScript encoding is a pandoras box</h4>
+					<pre><code data-trim>
+for ( var \u0062=0; \u0062 < 10; \u0062++){
+    \u0064\u006f\u0063\u0075\u006d\u0065\u006e\u0074                  
+    .\u0077\u0072\u0069\u0074\u0065\u006c\u006e
+    ("\u0048\u0065\u006c\u006c\u006f\u0020\u0057\u006f\u0072\u006c\u0064");
+}
+// Repeats 'Hello World' 10 times inside the &lt;body> tag
+    				</code></pre>
+    				<p><small><a href="http://mathiasbynens.be/notes/javascript-unicode">http://mathiasbynens.be/notes/javascript-unicode</a></small></p>
+				</section>
+
+				<section class="listing">
+					<h4>Down the rabbit hole: obfustictation and encoding</h4>
+					<small>
+					<ul>
+						<li>Binary Encoded ASCII Values using WhiteSpace (Tab = 0, Space = 1)</li>
+						<li>Using memeber enumeration to avoid obvious <code>document.write</code></li>
+						<li><a href="http://www.defcon.org/images/defcon-16/dc16-presentations/defcon-16-kolisar.pdf">http://www.defcon.org/images/defcon-16/dc16-presentations/defcon-16-kolisar.pdf</a><br>
+					<a href="https://www.defcon.org/images/defcon-16/dc16-presentations/kolisar/kolisar-extras.zip">https://www.defcon.org/images/defcon-16/dc16-presentations/kolisar/kolisar-extras.zip</a></li>
+					</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Rule 4</h4>
+					<h2>HTML escape JSON values in an HTML context and read the data with JSON.parse</h2>
+					<h4>Whitelist item: JSON in HTML, HTML escaped</h4>
+				</section>
+
+				<section>
+					<p>Set your <code>Content-Type</code> headers correctly</p>
+					<pre><code data-trim>
+HTTP/1.1 200
+...
+Content-Type: text/html; charset=utf-8 <-- bad
+...
+{"Message":"No HTTP resource was found that matches the request URI
+'foo.com/bar?content=The+Gardens&lt;script>alert(1)&lt;/script>&AddressLine2=foxlodge+woods&TownName=Meath'."}
+    				</code></pre>
+
+    				<p><small>This script will pop</small></p>
+				</section>
+
+				<section class="listing">
+					<h4>Anti-pattern</h4>
+					<pre><code data-trim>
+&lt;script>
+     var data = <%= data.to_json %>; // Do NOT do this without encoding the data
+&lt;/script>
+    				</code></pre>   
+				</section>
+
+				<section class="listing">
+					<h4>A better solution</h4>
+					<pre><code data-trim>
+<script id="init_data" type="application/json">
+    <%= html_escape(data.to_json) %>
+</script>
+    				</code></pre>
+
+					<pre><code data-trim>
+var dataElement = document.getElementById('init_data'),
+	jsonText = dataElement.textContent || dataElement.innerText,
+	initData = JSON.parse(_.unescape(jsonText));
+    				</code></pre>
+				</section>
+
+				<section class="listing">
+					<h4>Bonus rule:</h4>
+					<h2>Use the HTTP-Only flag on your cookies</h2>
+					<h4>To mitigate the effects of a successful XSS attack</h4>
+					<h4>Bonus rule:</h4>
+					<h2>Implement Content Security Policy</h2>
+					<h4>Can go a long way to mitigating XSS attacks</h4>
+				</section>
+
+				<section>
+					<h1>'HTML5' API's</h1>
+				</section>
+
+				<section>
+					<h2>This is a constantly changing landscape</h2>
+				</section>
+
+				<section class="listing">
+					<h4>Communication API's</h4>
+					<h2>Web Messaging / Cross Domain Messaging</h2>
+					<small>
+					<ul>
+						<li >Explicitly state the expected origin as the second argument to <code>postMessage</code> rather than <code>*</code></li>
+						<li >Always check the <code>origin</code> attribute of the sender to verify the data is originating from the expected location</li>
+					</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Validating FQDN's</h4>
+					<pre><code data-trim>
+if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
+    				</code></pre>
+    				<p><small>This is very insecure as <code>foo.com.attacker.com</code> will match, this goes for validating <em>all</em> FQDN's</small></p>
+				</section>
+
+				<section class="listing">
+					<h4>Communication API's</h4>
+					<h2>Cross Origin Resource Sharing (CORS)</h2>
+					<small>
+					<ul>
+						<li >Validate <em>all</em> URLs passed to <code>XMLHttpRequest.open</code></li>
+						<li >Try not to  supply sensitive information at endpoints that respond with the wildcard <code>Access-Control-Allow-Origin: *</code> header</li>
+					</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Storage API's</h4>
+					<h2>LocalStorage</h2>
+					<small>
+					<ul>
+						<li >Don't store sensitive information in <code>localStorage</code></li>
+						<li >Use <code>sessionStorage</code> instead of <code>localStorage</code> if persistent storage is not needed</li>
+						<li >Every object is shared within an origin and protected with the Same Origin Policy. Avoid host multiple applications on the same origin that utilise <code>localStorage</code></li>
+						<li >Watch out for cache poisoning when caching assets to <code>localStorage</code></li>
+					</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Multithreading API's</h4>
+					<h2>WebWorkers</h2>
+					<small>
+					<ul>
+						<li >There are several DOS vulnerabilities in the wild that exploit resource heavy CPU opertions in WebWorkers bricking the client</li>
+					</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Misc. API's</h4>
+					<h2>Sandboxing iframe's</h2>
+					<small>
+					<ul>
+						<li>
+							Use the sandbox attribute of an iframe for untrusted content
+						</li>
+					</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Misc API's</h4>
+					<h2>Offline applications</h2>
+					<small>
+						<ul>
+							<li >Cache poisoning <code>manifest</code> files through MITM attacks over insecure networks is possible. Use HTTPS.</li>
+						</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Machine access API's</h4>
+					<h2>WebGL</h2>
+					<small>
+						<ul>
+							<li>A whole new world of attacks targetting insecure GPU drivers form the web</li>
+							<li>User mode > Kernel mode</li>
+							<li><a href="https://chromium.googlesource.com/angle/angle">Chromium/Angle</a> - interesing approach to validating machine instructions</li>
+							<li>DOS</li>
+						</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>An attacked WebGL call stack</h4>
+					<img src="./imgs/webgl.svg" alt="WebGL" class="no-shadow">
+				</section>
+
+				<section>
+					<h1>Testing</h1>
+				</section>
+
+				<section>
+					<h2>Auditing*</h2>
+					<h4>* not an auditing crash course</h4>
+				</section>
+
+				<section class="listing">
+					<h4>Auditing: Goals (Strategy)</h4>
+					<small>
+					<ul>
+						<li>Where are your integration points?</li>
+						<li>What is the breadth and depth of your attack surface?</li>
+						<li>Where are your 'trust' boundries?</li>
+						<li>What are the fundmental security implications of your technology choices?</li>
+						<li>Auditing == understanding risk</li>
+					</ul>
+					</small>
+				</section>
+
+				<section>
+					<h2>Auditing is asynchronous</h2>
+					<p><small>Fits perfectly into the 'Github flow' model. Merger takes co-ownership of security consequences of merged code, as they should with quality and regressions</small></p>
+				</section>
+
+				<section>
+					<h3>You're blind to your own blindness</h3>
+				</section>
+
+				<section>
+					<h1>Penetration Testing</h1>
+				</section>
+
+				<section>
+					<h2>White box <small>vs</small> Blackbox</h2>
+				</section>
+
+				<section>
+					<h2>Penetration test <small>vs</small> Vulnerability scan</h2>
+					<img src="./imgs/venn.png" alt="Venn" class="no-shadow" style="width: 60%">
+				</section>
+
+				<section class="listing">
+					<h4>Tools</h4>
+					<ul>
+						<li>AppScan from IBM ($$$$)</li>
+						<li>WebInspect from HP ($$$$)</li>
+						<li>Burp Suite from Portswigger ($$)</li>
+						<li>Metasploit (Free or $$)</li>
+					</ul>
+				</section>
+
+				<section class="listing">
+					<h4>Vulnerability scanning in CI environments</h4>
+					<h2>Chef + Metaspolit + Jenkins</h2>
+					<p><small>Security regression testing in your CI environment<br><a href="https://github.com/rapid7/Chef-Metasploit">github.com/rapid7/Chef-Metasploit</a></small></p>
+				</section>
+
+				<section class="listing">
+					<h4>Penetration tests</h4>
+					<h3>Are always manual</h3>
+					<h3>Leverage professional experience</h3>
+					<h3>Have unique methodologies</h3>
+					<h3>Yield specialised reports</h3>
+					<h3>"Amateurs Have Automated Tools; Professionals Have People"</h3>
+				</section>
+
+				<section class="listing">
+					<h4>Testing environment</h4>
+					<h3>Do not do it in production. It's a shortcut, but a good pen tester will break things</h3>
+					<h3>Must accuratley represent your production environment in all ways (code, hardware et al)</h3>
+					<h3>Must run with accurate data. Having nothing but Lorem Ipsum's will bite you in the ass. Use production replicas and NDA's</h3>
+				</section>
+
+				<section class="listing">
+					<h4>Lifecycle of a pen test</h4>
+					<ol>
+						<li>Establish goal(s)</li>
+						<li>Reconnaissance</li>
+						<li>Discovery</li>
+						<li>Exploitation</li>
+						<li>Brute forcing</li>
+						<li>Social engineering</li>
+						<li>Taking control</li>
+						<li>Pivoting</li>
+						<li>Evidence collection</li>
+						<li>Reporting</li>
+						<li>Remediation</li>
+					</ol>
+				</section>
+
+				<section class="listing">
+					<h4>Other considerations</h4>
+					<h2>Scope</h2>
+					<small>
+						<ul>
+							<li>Limting scope can be important in getting the best results</li>
+							<li>Front-end scoped pen tests often aren't sufficent to capture your full attack surface</li>
+						</ul>
+					</small>
+				</section>
+
+				<section class="listing">
+					<h4>Other considerations</h4>
+					<h2>Internal vs. External</h2>
+					<small>
+						<ul>
+							<li>Does the capability exist to pen test? To properly vulnerability scan?</li>
+							<li>This is a very specific skill set. Get the best people. They usually aren't internal</li>
+						</ul>
+					</small>
+				</section>
+
+				<section>
+					<h2>Pen testing is synchronous</h2>
+				</section>
+
+				<section>
+					<h1>Thanks</h1>
+					<h3><a href="https://twitter.com/Joe8bit">@Joe8Bit</a> | <a href="https://github.com/Joe8Bit">github.com/Joe8Bit</a></h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+				overview: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
