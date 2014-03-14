@@ -39,14 +39,10 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
-				<section data-background="./imgs/princecharlescinema1.jpg">
-					
-				</section>
-
 				<section id="intro" data-transition="zoom" data-background-transition="zoom">
-					<h1>Browser Security</h1>
+					<h1>Security in the client</h1>
 					<h3>Patterns/anti-patterns, mitigation and testing</h3>
-					<h4><small>Thursday 13th of Feb 2014 | Joe Pettersson @ LondonJS</small></h4>
+					<h4><small>Friday 14th of Mar 2014 | Joe Pettersson @ JSConfUY</small></h4>
 				</section>
 
 				<section data-transition="zoom" data-background-transition="zoom">
@@ -87,7 +83,7 @@
 				</section>
 
 				<section data-transition="fade">
-					<img src="./imgs/blackbox.svg" alt="Blackbox" class="no-shadow">
+					<img src="./imgs/whitebox.svg" alt="Blackbox" class="no-shadow">
 				</section>
 
 				<section class="listing">
@@ -262,7 +258,7 @@ new Function("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
     				</code></pre>
 				</section>
 
-				<section class="listing">
+<!-- 				<section class="listing">
 					<h4>Tidbit</h4>
 					<h2>Firefox's .quote() method</h2>
 					<pre><code data-trim>
@@ -270,7 +266,7 @@ new Function("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
 ' \ — '.quote(); // ""  \u2014 ""
     				</code></pre>
     				<p><small><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/quote">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/quote</a></small></p>
-				</section>
+				</section> -->
 
 				<section class="listing">
 					<h4>Anti-pattern: not understanding the implications of using .setAttribute</h4>
@@ -344,7 +340,7 @@ Content-Type: text/html; charset=utf-8 <-- bad
 					<h4>Anti-pattern</h4>
 					<pre><code data-trim>
 &lt;script>
-     var data = <%= data.to_json %>; // Do NOT do this without encoding the data
+     var data = '<%= data.to_json %>'; 
 &lt;/script>
     				</code></pre>   
 				</section>
@@ -359,8 +355,15 @@ Content-Type: text/html; charset=utf-8 <-- bad
 
 					<pre><code data-trim>
 var dataElement = document.getElementById('init_data'),
-	jsonText = dataElement.textContent || dataElement.innerText,
-	initData = JSON.parse(_.unescape(jsonText));
+    jsonText = dataElement.textContent || dataElement.innerText,
+    initData;
+
+try {
+  initData = JSON.parse(_.unescape(jsonText));
+} catch (e) {
+  // oh oh, something went wrong
+}
+	
     				</code></pre>
 				</section>
 
@@ -429,7 +432,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					<h2>WebWorkers</h2>
 					<small>
 					<ul>
-						<li >There are several DOS vulnerabilities in the wild that exploit resource heavy CPU opertions in WebWorkers bricking the client</li>
+						<li >There are several DOS vulnerabilities in the wild that exploit resource heavy CPU opertions in WebWorkers bricking the client (e.g. recursive Fibonacci factoring)</li>
 					</ul>
 					</small>
 				</section>
@@ -464,7 +467,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 							<li>A whole new world of attacks targetting insecure GPU drivers form the web</li>
 							<li>User mode > Kernel mode</li>
 							<li><a href="https://chromium.googlesource.com/angle/angle">Chromium/Angle</a> - interesing approach to validating machine instructions</li>
-							<li>DOS</li>
+							<li>DOS attacks are trivial and brick the entire environment</li>
 						</ul>
 					</small>
 				</section>
@@ -491,7 +494,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 						<li>What is the breadth and depth of your attack surface?</li>
 						<li>Where are your 'trust' boundries?</li>
 						<li>What are the fundmental security implications of your technology choices?</li>
-						<li>Auditing == understanding risk</li>
+						<li>Auditing === understanding risk</li>
 					</ul>
 					</small>
 				</section>

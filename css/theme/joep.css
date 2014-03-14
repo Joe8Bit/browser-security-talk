@@ -15,7 +15,7 @@
  * GLOBAL STYLES
  *********************************************/
 body {
-  background: url(../../imgs/princecharlescinema.jpg) no-repeat center center fixed; 
+  background: url(../../imgs/monte-large.jpg) no-repeat center center fixed !important; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
