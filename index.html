@@ -54,23 +54,12 @@
 					<img src="./imgs/mckinsey.svg" alt="McKinsey & Company" class="no-shadow">
 				</section>
 
-				<section class="listing" data-transition="linear" data-background-transition="linear">
-					<h4>Concepts</h4>
-					<h3>1. The Fundamental Problem</h3>
-					<h3>2. Trust: never have it</h3>
-					<h4>Practice</h4>
-					<h3>3. DOM based XSS</h3>
-					<h3>4. Security and 'HTML5' API's</h3>
-					<h4>Test</h4>
-					<h3>5. Auditing and Penetration Testing</h3>
-				</section>
-
 				<section>
 					<h1>Why?</h1>
 				</section>
 
 				<section>
-					<h1>Concepts</h1>
+					<h2>We don't think about security enough</h2>
 				</section>
 
 				<section>
@@ -82,6 +71,10 @@
 					<h3>An environment where your code runs that you don't control is a <em>fundamentally</em> untrustworthy one</h3>
 				</section>
 
+				<section>
+					<h1>Strong decoupling</h1>
+				</section>
+
 				<section data-transition="fade">
 					<img src="./imgs/whitebox.svg" alt="Blackbox" class="no-shadow">
 				</section>
@@ -89,10 +82,6 @@
 				<section class="listing">
 					<h4>Issue</h4>
 					<h2>Thick clients/modular security</h2>
-				</section>
-
-				<section>
-					<h1>Strong decoupling</h1>
 				</section>
 
 				<section class="listing">
@@ -150,7 +139,7 @@
 				</section>
 
 				<section>
-					<h3>Encoding/Escaping</h1>
+					<h1>Encoding/Escaping</h1>
 				</section>
 
 				<section class="listing">
@@ -158,15 +147,6 @@
 					<h2>Don't put untrusted data into your HTML unless it is within a <em>whitelisted</em> set of exceptions*</h2>
 					<h4>* Whitelist to follow</h4>
 				</section>
-
-				<section class="large-h1">
-					<h1>EVER</h1>
-				</section>
-
-				<section class="super-h1">
-					<h1>EVER</h1>
-				</section>
-
 
 				<section class="listing">
 					<h4>Rule 1</h4>
@@ -280,13 +260,15 @@ var y = document.createTextNode("Click To Test");
 x.appendChild(y);
 document.body.appendChild(x);
     				</code></pre>
+    				<p><small>The <code>setAttribute(name, value)</code> method is dangerous because it implicitly coerces the second argument (value) into the DOM attribute datatype of first argument (name).</small></p>
 				</section>
 
 				<section class="listing">
 					<h4>Pattern</h4>
 					<p><small>Set the attribute directly, doing so with event handler attributes will allow JavaScript encoding to mitigate against DOM based XSS</small></p>
 					<pre><code data-trim>
-// The following does NOT work because the event handler is being set to a string. "alert(7)" is JavaScript encoded.
+// The following does NOT results in an XSS attack because the event handler 
+// is being set to a string. "alert(7)" is JavaScript encoded.
 document.getElementById("foo").onclick = "\u0061\u006c\u0065\u0072\u0074\u0028\u0037\u0029";
     				</code></pre>
 				</section>
@@ -322,7 +304,7 @@ for ( var \u0062=0; \u0062 < 10; \u0062++){
 					<h4>Whitelist item: JSON in HTML, HTML escaped</h4>
 				</section>
 
-				<section>
+<!-- 				<section>
 					<p>Set your <code>Content-Type</code> headers correctly</p>
 					<pre><code data-trim>
 HTTP/1.1 200
@@ -335,7 +317,7 @@ Content-Type: text/html; charset=utf-8 <-- bad
 
     				<p><small>This script will pop</small></p>
 				</section>
-
+ -->
 				<section class="listing">
 					<h4>Anti-pattern</h4>
 					<pre><code data-trim>
@@ -389,8 +371,8 @@ try {
 					<h2>Web Messaging / Cross Domain Messaging</h2>
 					<small>
 					<ul>
-						<li >Explicitly state the expected origin as the second argument to <code>postMessage</code> rather than <code>*</code></li>
-						<li >Always check the <code>origin</code> attribute of the sender to verify the data is originating from the expected location</li>
+						<li >Sender: explicitly state the expected origin as the second argument to <code>postMessage</code> rather than <code>*</code></li>
+						<li >Receiver: always check the <code>origin</code> attribute of the sender to verify the data is originating from the expected location</li>
 					</ul>
 					</small>
 				</section>
@@ -403,7 +385,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
     				<p><small>This is very insecure as <code>foo.com.attacker.com</code> will match, this goes for validating <em>all</em> FQDN's</small></p>
 				</section>
 
-				<section class="listing">
+<!-- 				<section class="listing">
 					<h4>Communication API's</h4>
 					<h2>Cross Origin Resource Sharing (CORS)</h2>
 					<small>
@@ -413,13 +395,13 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</ul>
 					</small>
 				</section>
-
+ -->
 				<section class="listing">
 					<h4>Storage API's</h4>
 					<h2>LocalStorage</h2>
 					<small>
 					<ul>
-						<li >Don't store sensitive information in <code>localStorage</code></li>
+						<li >Don't store sensitive information in <code>localStorage</code> (dump and pump attacks)</li>
 						<li >Use <code>sessionStorage</code> instead of <code>localStorage</code> if persistent storage is not needed</li>
 						<li >Every object is shared within an origin and protected with the Same Origin Policy. Avoid host multiple applications on the same origin that utilise <code>localStorage</code></li>
 						<li >Watch out for cache poisoning when caching assets to <code>localStorage</code></li>
@@ -432,7 +414,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					<h2>WebWorkers</h2>
 					<small>
 					<ul>
-						<li >There are several DOS vulnerabilities in the wild that exploit resource heavy CPU opertions in WebWorkers bricking the client (e.g. recursive Fibonacci factoring)</li>
+						<li >It's trivially easy to perform DOS attacks that exploit resource heavy CPU opertions (e.g. recursive Fibonacci factoring) in WebWorkers, in some cases bricking the client</li>
 					</ul>
 					</small>
 				</section>
@@ -443,7 +425,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					<small>
 					<ul>
 						<li>
-							Use the sandbox attribute of an iframe for untrusted content
+							Use the sandbox attribute of an iframe for untrusted content (allow-forms, allow-popups, allow-pointer-lock, allow-same-origin, allow-scripts, allow-top-navigation)
 						</li>
 					</ul>
 					</small>
@@ -466,7 +448,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 						<ul>
 							<li>A whole new world of attacks targetting insecure GPU drivers form the web</li>
 							<li>User mode > Kernel mode</li>
-							<li><a href="https://chromium.googlesource.com/angle/angle">Chromium/Angle</a> - interesing approach to validating machine instructions</li>
+							<li><a href="https://chromium.googlesource.com/angle/angle">Chromium/Angle</a> - interesting approach to validating machine instructions</li>
 							<li>DOS attacks are trivial and brick the entire environment</li>
 						</ul>
 					</small>
