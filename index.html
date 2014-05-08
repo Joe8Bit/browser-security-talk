@@ -41,8 +41,8 @@
 
 				<section id="intro" data-transition="zoom" data-background-transition="zoom">
 					<h1>Security in the client</h1>
-					<h3>Patterns/anti-patterns, mitigation and testing</h3>
-					<h4><small>Friday 14th of Mar 2014 | Joe Pettersson @ JSConfUY</small></h4>
+					<h3>New APIs, attacks, mitigation and testing</h3>
+					<h4><small>Friday 9th of May 2014 | Joe Pettersson @ ScotlandJS</small></h4>
 				</section>
 
 				<section data-transition="zoom" data-background-transition="zoom">
@@ -112,11 +112,6 @@
 					<h2>The concepts in front-end security are getting more complex</h2>
 				</section>
 
-				<section>
-					<h1>In practice</h1>
-					<h4>(well, one part of it anyway)</h4>
-				</section>
-
 				<section class="listing" data-transition="fade" data-background-transition="fade">
 					<h4>Purely clientside attacks</h4>
 					<ul>
@@ -128,238 +123,12 @@
 						<li>Authentication attacks</li>
 						<li>Cache poisoning</li>
 						<li>...</li>
+						<li>A new generation of APIs</li>
 					</ul>
 				</section>
 
-				<section class="listing">
-					<h4>Cross Site Scripting (XSS)</h4>
-					<h3>Stored/persistent</h3>
-					<h3>Reflected/non-persisted</h3>
-					<h3>DOM based</h3>
-				</section>
-
 				<section>
-					<h1>Encoding/Escaping</h1>
-				</section>
-
-				<section class="listing">
-					<h4>Rule 0</h4>
-					<h2>Don't put untrusted data into your HTML unless it is within a <em>whitelisted</em> set of exceptions*</h2>
-					<h4>* Whitelist to follow</h4>
-				</section>
-
-				<section class="listing">
-					<h4>Rule 1</h4>
-					<h2>Escape untrusted data placed into the content of an HTML element</h2>
-					<h4>Whitelist item: content of an HTML element, HTML escaped</h4>
-				</section>
-
-				<section class="listing">
-					<h4>Bad</h4>
-					<pre><code data-trim>
-element.innerHTML = "<p onmouseover='alert(1)'>Tags and markup</p>";
-element.outerHTML = "<p onmouseover='alert(1)'>Tags and markup</p>";
-document.write("<p onmouseover='alert(1)'>Tags and markup</p>");
-document.writeln("<p onmouseover='alert(1)'>Tags and markup</p>");
-    				</code></pre>
-    				<h4>Good</h4>
-    				<pre><code data-trim>
-element.innerHTML = _.escape("<p onmouseover='alert(1)'>Tags and markup</p>") // Underscore/lo-dash;
-element.outerHTML = "<p onmouseover='alert(1)'>Tags and markup</p>".escapeHTML() // Prototype;
-document.write(_.escape("<p onmouseover='alert(1)'>Tags and markup</p>"));
-document.writeln("<p onmouseover='alert(1)'>Tags and markup</p>".escapeHTML());
-    				</code></pre>
-				</section>
-
-				<section class="listing">
-					<h4>Rolling your own*</h4>
-					<pre><code data-trim>
-// From Mustache.js https://github.com/janl/mustache.js/blob/master/mustache.js#L47				
-var entityMap = {
-	"&": "&amp;amp;",
-	"<": "&amp;lt;",
-	">": "&amp;gt;",
-	'"': '&amp;quot;',
-	"'": '&amp;#39;',
-	"/": '&amp;#x2F;'
-};
-
-function escapeHtml(string) {
-	return String(string).replace(/[&<>"'\/]/g, function (s) {
-		return entityMap[s];
-	});
-}
-    				</code></pre>
-					<h4>* proceed with caution</h4>
-				</section>
-
-				<section class="listing">
-					<h4>Rule 2</h4>
-					<h2>Escape everything non-alphanumeric inside HTML attributes</h2>
-					<h4>Whitelist item: content of an HTML attribute, escape/encode everything non-alphanumeric</h4>
-				</section>
-
-				<section>
-					<h3>Not for complex complex attributes where script execution can more easily take place</h3>
-					<p>Like <code>href</code>, <code>src</code>, <code>style</code> or any of the inline event handlers like <code>onmouseover</code></p>
-				</section>
-
-				<section>
-					<h3>But why is this any different from the same escaping done on HTML element contents?</h3>
-				</section>
-
-				<section>
-					<h3>Because people write HTML without quoted attributes</h3>
-					<p>Properly quoted attributes can only be escaped with the corresponding quote. Unquoted attributes can be broken out of with many characters, including <code>[space] % * + , - / ; < = > ^ |</code></p>
-				</section>
-
-				<section class="listing">
-					<h4>Rule 3</h4>
-					<h2>Untrusted data when dynamically generating JavaScript goes inside a quoted "data value" after it has been escaped/encoded</h2>
-					<h4>Whitelist item: inside data JavaScript data values, JavaScript escaped</h4>
-				</section>
-
-				<section>
-					<h3>You should already know this.</h3>
-				</section>
-
-				<section class="listing">
-					<h4>Tip</h4>
-					<h3>This same JavaScript escaping should also always apply to the 'complex' attributes listed before</h3>
-					<h4>Tip</h4>
-					<h3>Beware <em>ALL</em> evals, even the implicit ones</h3>
-					<pre><code data-trim>
-// Explicit eval: always bad
-eval("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
-// Implicit eval: always bad
-window.setInterval("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
-window.setTimeout("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
-new Function("...EVEN IF YOU ESCAPE UNTRUSTED DATA YOU COULD BE XSS'D HERE...");
-    				</code></pre>
-				</section>
-
-<!-- 				<section class="listing">
-					<h4>Tidbit</h4>
-					<h2>Firefox's .quote() method</h2>
-					<pre><code data-trim>
-'Hello world!'.quote();	// "Hello world!"
-' \ — '.quote(); // ""  \u2014 ""
-    				</code></pre>
-    				<p><small><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/quote">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/quote</a></small></p>
-				</section> -->
-
-				<section class="listing">
-					<h4>Anti-pattern: not understanding the implications of using .setAttribute</h4>
-					<pre><code data-trim>
-var x = document.createElement("a");
-x.href= "#" ;
-// In the line of code below, the encoded data on the right (the second argument to setAttribute) 
-// is an example of untrusted data that was properly JavaScript encoded but still executes.
-x.setAttribute("onclick", "\u0061\u006c\u0065\u0072\u0074\u0028\u0032\u0032\u0029");
-var y = document.createTextNode("Click To Test");
-x.appendChild(y);
-document.body.appendChild(x);
-    				</code></pre>
-    				<p><small>The <code>setAttribute(name, value)</code> method is dangerous because it implicitly coerces the second argument (value) into the DOM attribute datatype of first argument (name).</small></p>
-				</section>
-
-				<section class="listing">
-					<h4>Pattern</h4>
-					<p><small>Set the attribute directly, doing so with event handler attributes will allow JavaScript encoding to mitigate against DOM based XSS</small></p>
-					<pre><code data-trim>
-// The following does NOT results in an XSS attack because the event handler 
-// is being set to a string. "alert(7)" is JavaScript encoded.
-document.getElementById("foo").onclick = "\u0061\u006c\u0065\u0072\u0074\u0028\u0037\u0029";
-    				</code></pre>
-				</section>
-
-				<section class="listing">
-					<h4>Aside: JavaScript encoding is a pandoras box</h4>
-					<pre><code data-trim>
-for ( var \u0062=0; \u0062 < 10; \u0062++){
-    \u0064\u006f\u0063\u0075\u006d\u0065\u006e\u0074                  
-    .\u0077\u0072\u0069\u0074\u0065\u006c\u006e
-    ("\u0048\u0065\u006c\u006c\u006f\u0020\u0057\u006f\u0072\u006c\u0064");
-}
-// Repeats 'Hello World' 10 times inside the &lt;body> tag
-    				</code></pre>
-    				<p><small><a href="http://mathiasbynens.be/notes/javascript-unicode">http://mathiasbynens.be/notes/javascript-unicode</a></small></p>
-				</section>
-
-				<section class="listing">
-					<h4>Down the rabbit hole: obfustictation and encoding</h4>
-					<small>
-					<ul>
-						<li>Binary Encoded ASCII Values using WhiteSpace (Tab = 0, Space = 1)</li>
-						<li>Using memeber enumeration to avoid obvious <code>document.write</code></li>
-						<li><a href="http://www.defcon.org/images/defcon-16/dc16-presentations/defcon-16-kolisar.pdf">http://www.defcon.org/images/defcon-16/dc16-presentations/defcon-16-kolisar.pdf</a><br>
-					<a href="https://www.defcon.org/images/defcon-16/dc16-presentations/kolisar/kolisar-extras.zip">https://www.defcon.org/images/defcon-16/dc16-presentations/kolisar/kolisar-extras.zip</a></li>
-					</ul>
-					</small>
-				</section>
-
-				<section class="listing">
-					<h4>Rule 4</h4>
-					<h2>HTML escape JSON values in an HTML context and read the data with JSON.parse</h2>
-					<h4>Whitelist item: JSON in HTML, HTML escaped</h4>
-				</section>
-
-<!-- 				<section>
-					<p>Set your <code>Content-Type</code> headers correctly</p>
-					<pre><code data-trim>
-HTTP/1.1 200
-...
-Content-Type: text/html; charset=utf-8 <-- bad
-...
-{"Message":"No HTTP resource was found that matches the request URI
-'foo.com/bar?content=The+Gardens&lt;script>alert(1)&lt;/script>&AddressLine2=foxlodge+woods&TownName=Meath'."}
-    				</code></pre>
-
-    				<p><small>This script will pop</small></p>
-				</section>
- -->
-				<section class="listing">
-					<h4>Anti-pattern</h4>
-					<pre><code data-trim>
-&lt;script>
-     var data = '<%= data.to_json %>'; 
-&lt;/script>
-    				</code></pre>   
-				</section>
-
-				<section class="listing">
-					<h4>A better solution</h4>
-					<pre><code data-trim>
-<script id="init_data" type="application/json">
-    <%= html_escape(data.to_json) %>
-</script>
-    				</code></pre>
-
-					<pre><code data-trim>
-var dataElement = document.getElementById('init_data'),
-    jsonText = dataElement.textContent || dataElement.innerText,
-    initData;
-
-try {
-  initData = JSON.parse(_.unescape(jsonText));
-} catch (e) {
-  // oh oh, something went wrong
-}
-	
-    				</code></pre>
-				</section>
-
-				<section class="listing">
-					<h4>Bonus rule:</h4>
-					<h2>Use the HTTP-Only flag on your cookies</h2>
-					<h4>To mitigate the effects of a successful XSS attack</h4>
-					<h4>Bonus rule:</h4>
-					<h2>Implement Content Security Policy</h2>
-					<h4>Can go a long way to mitigating XSS attacks</h4>
-				</section>
-
-				<section>
-					<h1>'HTML5' API's</h1>
+					<h1>New browser APIs</h1>
 				</section>
 
 				<section>
