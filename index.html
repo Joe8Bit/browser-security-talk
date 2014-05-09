@@ -45,46 +45,41 @@
 					<h4><small>Friday 9th of May 2014 | Joe Pettersson @ ScotlandJS | <a href="http://joe8bit.github.io/browser-security-talk/">joe8bit.github.io/browser-security-talk</a></small></h4>
 				</section>
 
-				<section data-transition="zoom" data-background-transition="zoom">
+				<section data-transition="zoom" data-background-transition="zoom" id="who">
 					<h1>Joe Pettersson</h1>
 					<h3><a href="https://twitter.com/Joe8bit">@Joe8Bit</a> | <a href="https://github.com/Joe8Bit">github.com/Joe8Bit</a></h3>
 				</section>
 
-				<section data-background="#002960" data-transition="zoom">
+				<section id="where" data-background="#002960" data-transition="zoom" >
 					<img src="./imgs/mckinsey.svg" alt="McKinsey & Company" class="no-shadow">
 				</section>
 
-				<section>
+				<section id="why">
 					<h1>Why?</h1>
 				</section>
 
-				<section>
+				<section id="not-enough">
 					<h2>We don't think about security enough</h2>
 				</section>
 
-				<section>
+				<section id="fundamentally">
 					<h2 class="fade">The Fundamental Problem:</h2>
 					<h1>The 'Client' Environment</h1>
 				</section>
 
-				<section>
-					<h3>An environment where your code runs that you don't control is a <em>fundamentally</em> untrustworthy one</h3>
+				<section id="untrustworthy">
+					<h3>An environment where your code runs that you don't control is a <span class="large">fundamentally</span> untrustworthy one</h3>
 				</section>
 
-				<section>
+				<section id="strong-decoupling">
 					<h1>Strong decoupling</h1>
 				</section>
 
-				<section data-transition="fade">
+				<section data-transition="fade" id="blackbox">
 					<img src="./imgs/whitebox.svg" alt="Blackbox" class="no-shadow">
 				</section>
 
-				<section class="listing">
-					<h4>Issue</h4>
-					<h2>Thick clients/modular security</h2>
-				</section>
-
-				<section class="listing">
+				<section class="listing" id="blackbox-example">
 					<h4>Example</h4>
 					<h3>A client side HTTP interface shouldn't inherently trust output from a service it's utilising</h3>
 					<h4>Exploited</h4>
@@ -92,26 +87,31 @@
 					<h3>An open-redirect was exploited to leverage information leakage via a same-origin include</h3>
 				</section>
 
-				<section>
+				<section id="multi-tiered">
 					<h3>Learn from decades of network security models and enforce multi-tiered trust boundries</h3>
 				</section>
 
-				<section>
+				<section class="listing" id="think-clients">
+					<h4>Issue</h4>
+					<h2>Thick clients/modular security</h2>
+				</section>
+
+				<section id="trust-models">
 					<img src="./imgs/trust-models.svg" alt="Trust Models" class="no-shadow">
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="xss-antipattern">
 					<h4>Anti-pattern</h4>
 					<h3>A view implicitly trusting output from a model</h3>
 					<h4>Pattern</h4>
 					<h3>The DOM provides a big attack surface for XSS attacks so all interactions with it should be sanitised, regardless of their source</h3>
 				</section>
 
-				<section>
+				<section id="more-complex">
 					<h2>The concepts in front-end security are getting more complex</h2>
 				</section>
 
-				<section class="listing" data-transition="fade" data-background-transition="fade">
+				<section class="listing" data-transition="fade" data-background-transition="fade" id="clientside-attacks">
 					<h4>Purely clientside attacks</h4>
 					<ul>
 						<li>Content spoofing</li>
@@ -126,11 +126,11 @@
 					</ul>
 				</section>
 
-				<section>
+				<section id="constant-change">
 					<h2>This is a constantly changing landscape</h2>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="communication-apis">
 					<h4>Communication API's</h4>
 					<h2>Web Messaging / Cross Domain Messaging</h2>
 					<small>
@@ -141,7 +141,7 @@
 					</small>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="validating-fqdns">
 					<h4>Validating FQDN's</h4>
 					<pre><code data-trim>
 if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
@@ -149,18 +149,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
     				<p><small>This is very insecure as <code>foo.com.attacker.com</code> will match, this goes for validating <em>all</em> FQDN's</small></p>
 				</section>
 
-<!-- 				<section class="listing">
-					<h4>Communication API's</h4>
-					<h2>Cross Origin Resource Sharing (CORS)</h2>
-					<small>
-					<ul>
-						<li >Validate <em>all</em> URLs passed to <code>XMLHttpRequest.open</code></li>
-						<li >Try not to  supply sensitive information at endpoints that respond with the wildcard <code>Access-Control-Allow-Origin: *</code> header</li>
-					</ul>
-					</small>
-				</section>
- -->
-				<section class="listing">
+				<section class="listing" id="storage-apis">
 					<h4>Storage API's</h4>
 					<h2>Storing data in the client</h2>
 					<small>
@@ -174,7 +163,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="multithreading">
 					<h4>Multithreading API's</h4>
 					<h2>WebWorkers</h2>
 					<small>
@@ -184,7 +173,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="iframes">
 					<h4>Misc. API's</h4>
 					<h2>iFrame's</h2>
 					<small>
@@ -197,7 +186,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="offline">
 					<h4>Misc API's</h4>
 					<h2>Offline applications</h2>
 					<small>
@@ -208,7 +197,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="webgl">
 					<h4>Machine access API's</h4>
 					<h2>WebGL</h2>
 					<small>
@@ -221,21 +210,21 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="webgl-attack">
 					<h4>An attacked WebGL call stack</h4>
 					<img src="./imgs/webgl.svg" alt="WebGL" class="no-shadow">
 				</section>
 
-				<section>
+				<section id="testing">
 					<h1>Testing</h1>
 				</section>
 
-				<section>
+				<section id="auditing">
 					<h2>Auditing*</h2>
 					<h4>* not an auditing crash course</h4>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="auditing-goals">
 					<h4>Auditing: Goals (Strategy)</h4>
 					<small>
 					<ul>
@@ -248,29 +237,29 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section>
+				<section id="auditing-async">
 					<h2>Auditing is asynchronous</h2>
 					<p><small>Fits perfectly into the 'Github flow' model. Merger takes co-ownership of security consequences of merged code, as they should with quality and regressions</small></p>
 				</section>
 
-				<section>
+				<section id="blind">
 					<h3>You're blind to your own blindness</h3>
 				</section>
 
-				<section>
+				<section id="pen-testing">
 					<h1>Penetration Testing</h1>
 				</section>
 
-				<section>
+				<section id="white-vs-black">
 					<h2>White box <small>vs</small> Blackbox</h2>
 				</section>
 
-				<section>
+				<section id="pentest-vs-vulnscan">
 					<h2>Penetration test <small>vs</small> Vulnerability scan</h2>
 					<img src="./imgs/venn.png" alt="Venn" class="no-shadow" style="width: 60%">
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="tools">
 					<h4>Tools</h4>
 					<ul>
 						<li>AppScan from IBM ($$$$)</li>
@@ -280,13 +269,13 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</ul>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="in-ci">
 					<h4>Vulnerability scanning in CI environments</h4>
 					<h2>Chef + Metaspolit + Jenkins</h2>
 					<p><small>Security regression testing in your CI environment<br><a href="https://github.com/rapid7/Chef-Metasploit">github.com/rapid7/Chef-Metasploit</a></small></p>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="what-is-a-pentest">
 					<h4>Penetration tests</h4>
 					<h3>Are always manual</h3>
 					<h3>Leverage professional experience</h3>
@@ -295,14 +284,14 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					<h3>"Amateurs Have Automated Tools; Professionals Have People"</h3>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="how">
 					<h4>Testing environment</h4>
 					<h3>Do not do it in production. It's a shortcut, but a good pen tester will break things</h3>
 					<h3>Must accuratley represent your production environment in all ways (code, hardware et al)</h3>
 					<h3>Must run with accurate data. Having nothing but Lorem Ipsum's will bite you in the ass. Use production replicas and NDA's</h3>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="lifecycle">
 					<h4>Lifecycle of a pen test</h4>
 					<ol>
 						<li>Establish goal(s)</li>
@@ -319,7 +308,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</ol>
 				</section>
 
-				<section class="listing">
+				<section class="listing" id="internal-vs-external">
 					<h4>Other considerations</h4>
 					<h2>Internal vs. External</h2>
 					<small>
@@ -330,11 +319,11 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					</small>
 				</section>
 
-				<section>
+				<section id="synchronous">
 					<h2>Pen testing is synchronous</h2>
 				</section>
 
-				<section>
+				<section id="thanks">
 					<h1>Thanks</h1>
 					<h3><a href="https://twitter.com/Joe8bit">@Joe8Bit</a> | <a href="https://github.com/Joe8Bit">github.com/Joe8Bit</a></h3>
 				</section>
