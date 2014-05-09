@@ -92,7 +92,6 @@
 					<h3>An open-redirect was exploited to leverage information leakage via a same-origin include</h3>
 				</section>
 
-
 				<section>
 					<h3>Learn from decades of network security models and enforce multi-tiered trust boundries</h3>
 				</section>
@@ -125,10 +124,6 @@
 						<li>...</li>
 						<li>A new generation of APIs</li>
 					</ul>
-				</section>
-
-				<section>
-					<h1>New browser APIs</h1>
 				</section>
 
 				<section>
@@ -167,13 +162,14 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
  -->
 				<section class="listing">
 					<h4>Storage API's</h4>
-					<h2>LocalStorage</h2>
+					<h2>Storing data in the client</h2>
 					<small>
 					<ul>
-						<li >Don't store sensitive information in <code>localStorage</code> (dump and pump attacks)</li>
+						<li >Don't store sensitive information in <code>localStorage</code>/<code>IndexDB</code> (dump and pump attacks, no content protection like cookies)</li>
 						<li >Use <code>sessionStorage</code> instead of <code>localStorage</code> if persistent storage is not needed</li>
 						<li >Every object is shared within an origin and protected with the Same Origin Policy. Avoid host multiple applications on the same origin that utilise <code>localStorage</code></li>
 						<li >Watch out for cache poisoning when caching assets to <code>localStorage</code></li>
+						<li>SQL injection in WebSQL</li>
 					</ul>
 					</small>
 				</section>
@@ -190,11 +186,12 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 
 				<section class="listing">
 					<h4>Misc. API's</h4>
-					<h2>Sandboxing iframe's</h2>
+					<h2>iFrame's</h2>
 					<small>
 					<ul>
+						<li>Since their inception have been a massive attack vector</li>
 						<li>
-							Use the sandbox attribute of an iframe for untrusted content (allow-forms, allow-popups, allow-pointer-lock, allow-same-origin, allow-scripts, allow-top-navigation)
+							Use the <code>sandbox</code> attribute of an iframe for untrusted content (allow-forms, allow-popups, allow-pointer-lock, allow-same-origin, allow-scripts, allow-top-navigation)
 						</li>
 					</ul>
 					</small>
@@ -206,6 +203,7 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 					<small>
 						<ul>
 							<li >Cache poisoning <code>manifest</code> files through MITM attacks over insecure networks is possible. Use HTTPS.</li>
+							<li>ServiceWorkers? A potential solution</li>
 						</ul>
 					</small>
 				</section>
@@ -319,17 +317,6 @@ if (message.origin.indexOf("foo.com") !== -1) { /* ... */ }
 						<li>Reporting</li>
 						<li>Remediation</li>
 					</ol>
-				</section>
-
-				<section class="listing">
-					<h4>Other considerations</h4>
-					<h2>Scope</h2>
-					<small>
-						<ul>
-							<li>Limting scope can be important in getting the best results</li>
-							<li>Front-end scoped pen tests often aren't sufficent to capture your full attack surface</li>
-						</ul>
-					</small>
 				</section>
 
 				<section class="listing">
