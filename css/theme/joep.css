@@ -22,6 +22,16 @@ body {
   background-size: cover;
 }
 
+#hashtag {
+  position: fixed;
+  z-index: 9999;
+  top: 30px;
+  right: 30px;
+  color: #fff;
+  font-style: 16px;
+  font-family: 'Helvetica', sans-serif;
+}
+
 #border {
   position: fixed;
   top: 0px;
