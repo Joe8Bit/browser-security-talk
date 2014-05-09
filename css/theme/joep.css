@@ -28,8 +28,9 @@ body {
   top: 30px;
   right: 30px;
   color: #fff;
-  font-style: 16px;
-  font-family: 'Helvetica', sans-serif;
+  font-size: 22px;
+  font-family: 'League Gothic', 'Helvetica', sans-serif;
+  opacity: 0.6;
 }
 
 #border {
